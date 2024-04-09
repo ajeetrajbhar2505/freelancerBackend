@@ -6,6 +6,26 @@ const { generateToken, verifyToken } = require('..//controllers/tokenController'
 const path = require('path');
 
 
+// get users
+exports.getUsers = async (req, res) => {    
+    try {
+
+        const users = await User.find({});
+        res.status(200).json({ status: 200, data: users });
+      
+    } catch (err) {
+        // Handle any errors
+        console.error(err);
+        const error = new ErrorModel({
+            message: err.message,
+            statusCode: err.statusCode,
+            apiEndpoint: req.originalUrl,
+        });
+        await error.save();
+        res.status(500).json({ status: 500, message: 'Server error' });
+    }
+};
+
 // Controller function to create a new user
 exports.createUser = async (req, res) => {
     try {
@@ -13,9 +33,9 @@ exports.createUser = async (req, res) => {
         const { username, password, email } = req.body;
 
         // Check if the username or email already exists
-        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(210).json({ status: 300, message: 'Username or email already exists' });
+            return res.status(210).json({ status: 300, message: 'Email already exists' });
         }
 
         // Create a new user instance
@@ -147,6 +167,7 @@ exports.verifyOTP = async (req, res) => {
         const isEmailverfyurl = req.originalUrl == '/api/users/verify-email' ? true : false
         if (isEmailverfyurl) {
             await User.findByIdAndUpdate(tokenData.userId, { email_verified: true });
+            await Token.findByIdAndUpdate(tokenData._id, { verified: true });
         }
         else {
             await Token.findByIdAndUpdate(tokenData._id, { verified: true });
