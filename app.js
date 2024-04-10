@@ -12,7 +12,7 @@ app.use(express.json())
 dotenv.config()
 app.use(cors())
 
-// const server = http.createServer(app);
+const server = http.createServer(app);
 // const io = socketIo(server);
 
 const userRoutes = require('./routes/userRoutes');
