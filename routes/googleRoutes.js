@@ -1,9 +1,9 @@
 // roomRoutes.js
 const express = require('express');
 const router = express.Router();
-const roomController = require('../controllers/roomController');
+const googleController = require('../controllers/googleController');
 
 // Route to create a new room
-router.post('/createRoom', roomController.createRoom);
+router.get('/google', googleController.google);
 
 module.exports = router;

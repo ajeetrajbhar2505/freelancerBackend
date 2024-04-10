@@ -12,7 +12,7 @@ async function generateToken({ userId, email, dateTime }, callback) {
             dateTime: dateTime,
             otp: otp
         };
-        const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '15m' }); // Sign JWT token with expiry
+        const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '10h' }); // Sign JWT token with expiry
         await Token.create(tokenData); // Create token data in the database
         const mailOption = {
             from: "ajeetrajbhar2504@gmail.com",
